@@ -14,11 +14,13 @@ gem 'knife-maas'
 ### knife.rb options
 
 `knife[:maas_site]` - The MaaS that you'd like to interact with, ex: "http://172.16.100.54/MAAS/"
-`knife[:maas_api_key]` = The MaaS API key from your settings page, ex: "Dce3YFAKEY3f9Lvm:jfPMAASfgDVbjR9:jS6JPX8bKEYFp8W2DR7MBuPb9QrEFbYT"
+`knife[:maas_api_key]` - The MaaS API key from your settings page, ex: "Dce3YFAKEY3f9Lvm:jfPMAASfgDVbjR9:jS6JPX8bKEYFp8W2DR7MBuPb9QrEFbYT"
 
 ## Commands
 
 `knife maas server list` - Outputs the nodes inside on MaaS
+
+`knife maas server acquire -h HOSTNAME` - Acquires the node under your account
 
 `knife maas server start -s NODE-(UUID)` - Starts up the node
 
