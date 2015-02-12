@@ -22,6 +22,8 @@ gem 'knife-maas'
 
 `knife maas server acquire -h HOSTNAME` - Acquires the node under your account
 
+`knife maas server bootstrap -h HOSTNAME -s NODE-(UUID)` - Acquires and starts the node under your account, and bootstraps chef on it with your default settings
+
 `knife maas server start -s NODE-(UUID)` - Starts up the node
 
 `knife maas server stop -s NODE-(UUID)` - Stops the node
