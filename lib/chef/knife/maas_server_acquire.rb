@@ -17,8 +17,8 @@ class Chef
       :description => "The HOSTNAME inside of MaaS"
 
       def run
-        system_id = locate_config_value(:hostname)
-        response = access_token.request(:post, "/nodes/?op=acquire&name=#{hosname}")
+        hostname = locate_config_value(:hostname)
+        response = access_token.request(:post, "/nodes/?op=acquire&name=#{hostname}")
         puts "Acquiring #{hostname} under your account now...."
       end
 
