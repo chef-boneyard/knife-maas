@@ -24,7 +24,7 @@ class Chef
         consumer = OAuth::Consumer.new( consumer_key,
                                         consumer_secret,
                                         {
-                                          :site => locate_config_value(:maas_site),
+                                          :site => locate_config_value(:maas_site)+"api/1.0/",
                                           :scheme => :header,
                                           :signature_method => "PLAINTEXT"
                                         })

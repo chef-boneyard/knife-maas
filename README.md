@@ -13,7 +13,7 @@ gem 'knife-maas'
 
 ### knife.rb options
 
-`knife[:maas_site]` - The endpoint that you'd like to call, ex: "http://172.16.100.54/MAAS/api/1.0/"
+`knife[:maas_site]` - The MaaS that you'd like to interact with, ex: "http://172.16.100.54/MAAS/"
 `knife[:maas_api_key]` = The MaaS API key from your settings page, ex: "Dce3YFAKEY3f9Lvm:jfPMAASfgDVbjR9:jS6JPX8bKEYFp8W2DR7MBuPb9QrEFbYT"
 
 ## Commands
