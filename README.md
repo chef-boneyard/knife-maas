@@ -1,30 +1,38 @@
-# Knife::Maas
+# knife-maas
 
-TODO: Write a gem description
+This is the knife plugin to talk to [MaaS](http://maas.ubuntu.com/).
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Run the following to install the plugin.
 
 ```ruby
 gem 'knife-maas'
 ```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install knife-maas
-
 ## Usage
 
-TODO: Write usage instructions here
+### knife.rb options
+
+`knife[:maas_site]` - The endpoint that you'd like to call, ex: "http://172.16.100.54/MAAS/api/1.0/"
+`knife[:maas_api_key]` = The MaaS API key from your settings page, ex: "Dce3YFAKEY3f9Lvm:jfPMAASfgDVbjR9:jS6JPX8bKEYFp8W2DR7MBuPb9QrEFbYT"
+
+## Commands
+
+`knife maas server list` - Outputs the nodes inside on MaaS
+
+`knife maas server start -s NODE-(UUID)` - Starts up the node
+
+`knife maas server stop -s NODE-(UUID)` - Stops the node
+
+`knife maas server release -s NODE-(UUID)`- Releases the node
+
+`knife maas server delete -s NODE-(UUID)` - Removes the node from MaaS
+
+
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/knife-maas/fork )
+1. Fork it ( https://github.com/jjasghar/knife-maas/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
