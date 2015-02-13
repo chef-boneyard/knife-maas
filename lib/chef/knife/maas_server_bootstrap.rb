@@ -43,8 +43,6 @@ class Chef
         sleep 30
         print(".")
 
-        require 'pry'; binding.pry
-
         bootstrap_ip_address = JSON.parse(system_info.body)["ip_addresses"][0]
         server = JSON.parse(system_info.body)["hostname"]
 
@@ -52,13 +50,13 @@ class Chef
           sleep @initial_sleep_delay ||= 10
           puts("done")
         }
-
-        bootstrap_for_node(bootstrap_ip_address).run
+        require 'pry'; binding.pry
+        bootstrap_for_node(server, bootstrap_ip_address).run
 
       end
 
 
-      def bootstrap_for_node(bootstrap_ip_address)
+      def bootstrap_for_node(server, bootstrap_ip_address)
         bootstrap = Chef::Knife::Bootstrap.new
         bootstrap.name_args = bootstrap_ip_address
         bootstrap.config[:run_list] = config[:run_list]
