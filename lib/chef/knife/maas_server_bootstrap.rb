@@ -26,6 +26,7 @@ class Chef
       def run
         hostname = locate_config_value(:hostname)
         response = access_token.request(:post, "/nodes/?op=acquire&name=#{hostname}")
+        system_info = access_token.request(:get, "/nodes/#{system_id}/")
         puts "Acquiring #{hostname} under your account now...."
 
         # hack to ensure the node have had time to spin up
@@ -44,7 +45,7 @@ class Chef
 
         require 'pry'; binding.pry
 
-        bootstrap_ip_address = JSON.parse(sys.body)["ip_addresses"][0]
+        bootstrap_ip_address = JSON.parse(system_info.body)["ip_addresses"][0]
 
         print(".") until tcp_test_ssh(bootstrap_ip_address) {
           sleep @initial_sleep_delay ||= 10
