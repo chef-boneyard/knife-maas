@@ -26,7 +26,6 @@ class Chef
       def run
         hostname = locate_config_value(:hostname)
         response = access_token.request(:post, "/nodes/?op=acquire&name=#{hostname}")
-        system_info = access_token.request(:get, "/nodes/#{system_id}/")
         puts "Acquiring #{hostname} under your account now...."
 
         # hack to ensure the node have had time to spin up
@@ -36,6 +35,7 @@ class Chef
 
         system_id = locate_config_value(:system_id)
         response = access_token.request(:post, "/nodes/#{system_id}/?op=start")
+        system_info = access_token.request(:get, "/nodes/#{system_id}/")
         puts "Starting up #{system_id} now...."
 
         # hack to ensure the nodes have had time to spin up
