@@ -46,6 +46,7 @@ class Chef
         require 'pry'; binding.pry
 
         bootstrap_ip_address = JSON.parse(system_info.body)["ip_addresses"][0]
+        server = JSON.parse(sys.body)["hostname"]
 
         print(".") until tcp_test_ssh(bootstrap_ip_address) {
           sleep @initial_sleep_delay ||= 10
@@ -64,7 +65,7 @@ class Chef
         bootstrap.config[:ssh_user] = config[:ssh_user]
         bootstrap.config[:identity_file] = config[:identity_file]
         bootstrap.config[:host_key_verify] = config[:host_key_verify]
-        bootstrap.config[:chef_node_name] = server.name
+        bootstrap.config[:chef_node_name] = server
         bootstrap.config[:prerelease] = config[:prerelease]
         bootstrap.config[:bootstrap_version] = locate_config_value(:bootstrap_version)
         bootstrap.config[:bootstrap_proxy] = locate_config_value(:bootstrap_proxy)
