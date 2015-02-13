@@ -51,12 +51,12 @@ class Chef
           puts("done")
         }
 
-        bootstrap_for_node(server, bootstrap_ip_address).run
+        bootstrap_for_node(bootstrap_ip_address).run
 
       end
 
 
-      def bootstrap_for_node(server, bootstrap_ip_address)
+      def bootstrap_for_node(bootstrap_ip_address)
         bootstrap = Chef::Knife::Bootstrap.new
         bootstrap.name_args = bootstrap_ip_address
         bootstrap.config[:run_list] = config[:run_list]
