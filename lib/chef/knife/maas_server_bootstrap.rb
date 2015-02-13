@@ -46,7 +46,7 @@ class Chef
         require 'pry'; binding.pry
 
         bootstrap_ip_address = JSON.parse(system_info.body)["ip_addresses"][0]
-        server = JSON.parse(sys.body)["hostname"]
+        server = JSON.parse(system_info.body)["hostname"]
 
         print(".") until tcp_test_ssh(bootstrap_ip_address) {
           sleep @initial_sleep_delay ||= 10
