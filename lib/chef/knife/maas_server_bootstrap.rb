@@ -28,6 +28,11 @@ class Chef
         response = access_token.request(:post, "/nodes/?op=acquire&name=#{hostname}")
         puts "Acquiring #{hostname} under your account now...."
 
+        # hack to ensure the node have had time to spin up
+        print(".")
+        sleep 30
+        print(".")
+
         system_id = locate_config_value(:system_id)
         response = access_token.request(:post, "/nodes/#{system_id}/?op=start")
         puts "Starting up #{system_id} now...."
@@ -36,6 +41,10 @@ class Chef
         print(".")
         sleep 30
         print(".")
+
+        require 'pry'; binding.pry
+
+        bootstrap_ip_address = JSON.parse(sys.body)["ip_addresses"][0]
 
         print(".") until tcp_test_ssh(bootstrap_ip_address) {
           sleep @initial_sleep_delay ||= 10
