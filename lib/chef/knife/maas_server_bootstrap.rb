@@ -1,4 +1,4 @@
-1require 'chef/knife/maas_base'
+require 'chef/knife/maas_base'
 
 class Chef
   class Knife
