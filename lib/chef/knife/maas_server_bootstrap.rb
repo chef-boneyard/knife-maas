@@ -51,6 +51,7 @@ class Chef
         until (os_system != "") do
           print(".")
           sleep @initial_sleep_delay ||= 10
+          system_info = access_token.request(:get, "/nodes/#{system_id}/")
           os_system = JSON.parse(system_info.body)["osystem"]
         end
         puts("Your system is #{os_system}")
@@ -61,12 +62,10 @@ class Chef
         }
 
         case os_system
-        when "ubuntu"
-          user = "ubuntu"
         when "centos"
           user = "cloud-user"
         else
-          user = config[:ssh_user]
+          user = "ubuntu"
         end
 
         require 'pry'; binding.pry
