@@ -1,4 +1,4 @@
-require 'chef/knife/maas_base'
+1require 'chef/knife/maas_base'
 
 class Chef
   class Knife
@@ -22,6 +22,19 @@ class Chef
       :short => "-s SYSTEM_ID",
       :long => "--system-id SYSTEM_ID",
       :description => "The System ID inside of MaaS"
+
+      option :template_file,
+      :long => "--template-file TEMPLATE",
+      :description => "Full path to location of template to use",
+      :proc => Proc.new { |t| Chef::Config[:knife][:template_file] = t },
+      :default => false
+
+      option :run_list,
+      :short => "-r RUN_LIST",
+      :long => "--run-list RUN_LIST",
+      :description => "Comma separated list of roles/recipes to apply",
+      :proc => lambda { |o| o.split(/[\s,]+/) },
+      :default => []
 
       def run
         hostname = locate_config_value(:hostname)
