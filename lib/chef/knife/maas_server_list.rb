@@ -15,7 +15,6 @@ class Chef
           ui.color('Status', :bold),
           ui.color('Power State', :bold),
           ui.color('Hostname', :bold),
-          ui.color('Operating System', :bold),
           ui.color('Owner', :bold),
           ui.color('IP Address', :bold)
         ]
@@ -50,12 +49,11 @@ class Chef
                            end
                           end
           server_list << server['hostname'].to_s
-          server_list << server['osystem'].to_s
           server_list << server['owner'].to_s
           server_list << server['ip_addresses'].to_s
 
         end
-        puts ui.list(server_list, :uneven_columns_across, 7)
+        puts ui.list(server_list, :uneven_columns_across, 6)
 
       end
 
