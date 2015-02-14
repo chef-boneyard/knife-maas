@@ -15,7 +15,6 @@ class Chef
           ui.color('Status', :bold),
           ui.color('Power State', :bold),
           ui.color('Hostname', :bold),
-          ui.color('Operating System', :bold),
           ui.color('Owner', :bold),
           ui.color('IP Address', :bold)
         ]
@@ -50,7 +49,6 @@ class Chef
                            end
                           end
           server_list << server['hostname'].to_s
-          server_list << server['osystem'].to_s
           server_list << server['owner'].to_s
           server_list << server['ip_addresses'].to_s
 
