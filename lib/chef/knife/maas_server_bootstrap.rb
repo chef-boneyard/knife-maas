@@ -44,23 +44,26 @@ class Chef
         sleep 30
         print(".")
 
-        bootstrap_ip_address = JSON.parse(system_info.body)["ip_addresses"][0]
         server = JSON.parse(system_info.body)["hostname"]
-        os_system = JSON.parse(system_info.body)["osystem"]
+        netboot = JSON.parse(system_info.body)["netboot"]
+        power_state = JSON.parse(system_info.body)["power_state"]
+
+        until ((netboot = "off") && (power_state = "on") ) do
+          print(".")
+          sleep @initial_sleep_delay ||= 10
+          system_info = access_token.request(:get, "/nodes/#{system_id}/")
+          netboot = JSON.parse(system_info.body)["netboot"]
+          power_state = JSON.parse(system_info.body)["power_state"]
+        end
+
+        bootstrap_ip_address = JSON.parse(system_info.body)["ip_addresses"][0]
 
         print(".") until tcp_test_ssh(bootstrap_ip_address) {
           sleep @initial_sleep_delay ||= 10
           puts("connected and done")
         }
 
-        until (os_system != "") do
-          print(".")
-          sleep @initial_sleep_delay ||= 10
-          system_info = access_token.request(:get, "/nodes/#{system_id}/")
-          os_system = JSON.parse(system_info.body)["osystem"]
-        end
-        puts("Your system is #{os_system}")
-
+        os_system = JSON.parse(system_info.body)["osystem"]
 
         case os_system
         when "centos"
