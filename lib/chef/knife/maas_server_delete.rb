@@ -46,7 +46,7 @@ class Chef
           destroy_item(Chef::Node, thing_to_delete, "node")
           destroy_item(Chef::ApiClient, thing_to_delete, "client")
         else
-          ui.warn("Corresponding node and client for the #{instance_id} server were not deleted and remain registered with the Chef Server")
+          ui.warn("Corresponding node and client for the #{hostname} server were not deleted and remain registered with the Chef Server")
         end
 
         response = access_token.request(:post, "/nodes/#{system_id}/?op=delete")
