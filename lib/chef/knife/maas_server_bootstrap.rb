@@ -48,8 +48,7 @@ class Chef
         server = JSON.parse(system_info.body)["hostname"]
         os_system = JSON.parse(system_info.body)["osystem"]
 
-
-        until tcp_test_ssh(bootstrap_ip_address) && (os_system != nil) do
+        until ((tcp_test_ssh(bootstrap_ip_address)) && (os_system != nil)) do
           print(".")
           sleep @initial_sleep_delay ||= 10
           os_system = JSON.parse(system_info.body)["osystem"]
