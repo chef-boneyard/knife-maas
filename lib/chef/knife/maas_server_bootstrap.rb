@@ -58,6 +58,11 @@ class Chef
 
         bootstrap_ip_address = JSON.parse(system_info.body)["ip_addresses"][0]
 
+        print(".")
+        sleep 30
+        print(".")
+        sleep 30
+
         print(".") until tcp_test_ssh(bootstrap_ip_address) {
           sleep @initial_sleep_delay ||= 10
           puts("connected and done")
