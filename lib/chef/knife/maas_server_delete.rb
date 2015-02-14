@@ -27,6 +27,15 @@ class Chef
       :default => false,
       :description => "Destroy corresponding node and client on the Chef Server, in addition to destroying the MaaS node itself. Assumes node and client have the same name as the server."
 
+      def destroy_item(klass, name, type_name)
+        begin
+          object = klass.load(name)
+          object.destroy
+          ui.warn("Deleted #{type_name} #{name}")
+        rescue Net::HTTPServerException
+          ui.warn("Could not find a #{type_name} named #{name} to delete!")
+        end
+      end
 
       def run
         system_id = locate_config_value(:system_id)
