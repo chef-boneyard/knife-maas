@@ -53,7 +53,7 @@ class Chef
           server_list << server['ip_addresses'].to_s
 
         end
-        puts ui.list(server_list, :uneven_columns_across, 7)
+        puts ui.list(server_list, :uneven_columns_across, 6)
 
       end
 
