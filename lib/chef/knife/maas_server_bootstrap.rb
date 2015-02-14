@@ -48,7 +48,7 @@ class Chef
         netboot = JSON.parse(system_info.body)["netboot"]
         power_state = JSON.parse(system_info.body)["power_state"]
 
-        until ((netboot == "off") && (power_state == "on") ) do
+        until ((netboot == "false") && (power_state == "on") ) do
           print(".")
           sleep @initial_sleep_delay ||= 10
           system_info = access_token.request(:get, "/nodes/#{system_id}/")
@@ -72,7 +72,6 @@ class Chef
           user = "ubuntu"
         end
 
-        require 'pry'; binding.pry
         bootstrap_for_node(server, bootstrap_ip_address, user).run
 
       end
