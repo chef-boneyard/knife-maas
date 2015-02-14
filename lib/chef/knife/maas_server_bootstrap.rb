@@ -48,12 +48,17 @@ class Chef
         server = JSON.parse(system_info.body)["hostname"]
         os_system = JSON.parse(system_info.body)["osystem"]
 
-        until ((tcp_test_ssh(bootstrap_ip_address)) && (os_system != nil)) do
+        until (os_system != nil)) do
           print(".")
           sleep @initial_sleep_delay ||= 10
           os_system = JSON.parse(system_info.body)["osystem"]
         end
-          puts("done and your system is #{os_system}")
+        puts("Your system is #{os_system}")
+
+        print(".") until tcp_test_ssh(bootstrap_ip_address) {
+          sleep @initial_sleep_delay ||= 10
+          puts("connected and done")
+        }
 
         case os_system
         when "ubuntu"
