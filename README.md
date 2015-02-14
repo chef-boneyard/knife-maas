@@ -22,6 +22,7 @@ gem install knife-maas
 ### Configuration
 
 `knife[:maas_site]` - The MaaS that you'd like to interact with, ex: "http://172.16.100.54/MAAS/", you'll need the ending `/` like the web gui.
+
 `knife[:maas_api_key]` - The MaaS API key from your settings page, ex: "Th1sIsFAKEY3f9Lvm:jaaMAASfgDVbjR9:jS6JPX8bKEYFp8W2DR7MBuPb9QrEFbYT"
 
 ## Commands
