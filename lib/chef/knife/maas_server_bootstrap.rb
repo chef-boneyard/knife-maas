@@ -48,7 +48,7 @@ class Chef
         server = JSON.parse(system_info.body)["hostname"]
         os_system = JSON.parse(system_info.body)["osystem"]
 
-        until (os_system != nil) do
+        until (os_system != "") do
           print(".")
           sleep @initial_sleep_delay ||= 10
           os_system = JSON.parse(system_info.body)["osystem"]
