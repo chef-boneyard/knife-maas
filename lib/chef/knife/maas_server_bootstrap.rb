@@ -25,15 +25,16 @@ class Chef
 
       def run
         hostname = locate_config_value(:hostname)
+        system_id = locate_config_value(:system_id)
+
         response = access_token.request(:post, "/nodes/?op=acquire&name=#{hostname}")
         puts "Acquiring #{hostname} under your account now...."
 
         # hack to ensure the node have had time to spin up
         print(".")
-        sleep 30
+        sleep 60
         print(".")
 
-        system_id = locate_config_value(:system_id)
         response = access_token.request(:post, "/nodes/#{system_id}/?op=start")
         system_info = access_token.request(:get, "/nodes/#{system_id}/")
         puts "Starting up #{system_id} now...."
@@ -45,22 +46,33 @@ class Chef
 
         bootstrap_ip_address = JSON.parse(system_info.body)["ip_addresses"][0]
         server = JSON.parse(system_info.body)["hostname"]
+        os_system = JSON.parse(system_info.body)["osystem"]
 
-        print(".") until tcp_test_ssh(bootstrap_ip_address) {
+        print(".") until tcp_test_ssh(bootstrap_ip_address) && os_system != nil {
           sleep @initial_sleep_delay ||= 10
-          puts("done")
+          os_system = JSON.parse(system_info.body)["osystem"]
+          puts("done and your system is #{os_system}")
         }
+
+        case os_system
+        when "ubuntu"
+          user = "ubuntu"
+        when "centos"
+          user = "cloud-user"
+        else
+          user = locate_config_value[:ssh_user]
+        end
+
         require 'pry'; binding.pry
-        bootstrap_for_node(server, bootstrap_ip_address).run
+        bootstrap_for_node(server, bootstrap_ip_address, user).run
 
       end
 
-
-      def bootstrap_for_node(server, bootstrap_ip_address)
+      def bootstrap_for_node(server, bootstrap_ip_address, user)
         bootstrap = Chef::Knife::Bootstrap.new
         bootstrap.name_args = bootstrap_ip_address
         bootstrap.config[:run_list] = config[:run_list]
-        bootstrap.config[:ssh_user] = config[:ssh_user]
+        bootstrap.config[:ssh_user] =  user
         bootstrap.config[:identity_file] = config[:identity_file]
         bootstrap.config[:host_key_verify] = config[:host_key_verify]
         bootstrap.config[:chef_node_name] = server
