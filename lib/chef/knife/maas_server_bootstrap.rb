@@ -54,7 +54,7 @@ class Chef
           sleep @initial_sleep_delay ||= 10
           os_system = JSON.parse(system_info.body)["osystem"]
         end
-        puts("done and your system is #{os_system}")
+          puts("done and your system is #{os_system}")
 
         case os_system
         when "ubuntu"
@@ -62,7 +62,7 @@ class Chef
         when "centos"
           user = "cloud-user"
         else
-          user = locate_config_value[:ssh_user]
+          user = locate_config_value(:ssh_user)
         end
 
         require 'pry'; binding.pry
