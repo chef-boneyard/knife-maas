@@ -66,7 +66,7 @@ class Chef
         when "centos"
           user = "cloud-user"
         else
-          user = locate_config_value(:ssh_user)
+          user = config[:ssh_user]
         end
 
         require 'pry'; binding.pry
