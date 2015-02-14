@@ -21,10 +21,14 @@ gem install knife-maas
 
 ### Configuration
 
-`knife[:maas_site]` - The MaaS that you'd like to interact with, ex: "http://172.16.100.54/MAAS/", you'll need the ending `/` like the web gui.
-`knife[:maas_api_key]` - The MaaS API key from your settings page, ex: "Th1sIsFAKEY3f9Lvm:jaaMAASfgDVbjR9:jS6JPX8bKEYFp8W2DR7MBuPb9QrEFbYT"
+`knife[:maas_site]` - The MaaS that you'd like to interact with, ex: `"http://172.16.100.54/MAAS/"`, you'll need the ending `/` like the web gui.
+
+`knife[:maas_api_key]` - The MaaS API key from your settings page, ex: `"Th1sIsFAKEY3f9Lvm:jaaMAASfgDVbjR9:jS6JPX8bKEYFp8W2DR7MBuPb9QrEFbYT"`
 
 ## Commands
+
+**Note**: Due to some limitations in the [MaaS API](http://maas.ubuntu.com/docs1.7/api.html) anything that has both `-h` and 
+`-s` are required to function. Hopefully future releases will only require one option.
 
 `knife maas server list` - Outputs the nodes inside on MaaS
 
@@ -38,10 +42,10 @@ gem install knife-maas
 
 `knife maas server stop -s NODE-(UUID)` - Stops the node
 
-`knife maas server release -s NODE-(UUID)`- Releases the node and puts it back in the available resources. This also has a `-P` command to purge it from
+`knife maas server release -s NODE-(UUID) -h HOSTNAME`- Releases the node and puts it back in the available resources. This also has a `-P` command to purge it from
 your chef server.
 
-`knife maas server delete -s NODE-(UUID)` - Removes the node completely from MaaS. This also has a `-P` command to purge it from your chef server.
+`knife maas server delete -s NODE-(UUID) -h HOSTNAME` - Removes the node completely from MaaS. This also has a `-P` command to purge it from your chef server.
 
 ## Contributing
 
