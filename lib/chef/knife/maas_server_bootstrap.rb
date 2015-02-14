@@ -48,6 +48,11 @@ class Chef
         server = JSON.parse(system_info.body)["hostname"]
         os_system = JSON.parse(system_info.body)["osystem"]
 
+        print(".") until tcp_test_ssh(bootstrap_ip_address) {
+          sleep @initial_sleep_delay ||= 10
+          puts("connected and done")
+        }
+
         until (os_system != "") do
           print(".")
           sleep @initial_sleep_delay ||= 10
@@ -56,10 +61,6 @@ class Chef
         end
         puts("Your system is #{os_system}")
 
-        print(".") until tcp_test_ssh(bootstrap_ip_address) {
-          sleep @initial_sleep_delay ||= 10
-          puts("connected and done")
-        }
 
         case os_system
         when "centos"
