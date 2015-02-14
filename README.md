@@ -1,24 +1,34 @@
 # knife-maas
 
-This is the knife plugin to talk to [MaaS](http://maas.ubuntu.com/).
+This is the knife plugin to talk to [MaaS](http://maas.ubuntu.com/). This also assumes you have MaaS
+configured with at least one user account. You'll need your API key as one of the
+configuration options. There is a [MaaS cookbook](https://supermarket.chef.io/cookbooks/maas) that
+this plugin has been tested against.
+
+This also assumes you have >= 1.7.1 of MaaS installed, and >= [Chef](http://chef.io) 12 installed.
+
+Please refer to the [CHANGELOG](CHANGELOG.md) for version history.
 
 ## Installation
 
 Run the following to install the plugin.
 
-```ruby
-gem 'knife-maas'
+```shell
+gem install knife-maas
 ```
+
 ## Usage
 
-### knife.rb options
+### Configuration
 
-`knife[:maas_site]` - The MaaS that you'd like to interact with, ex: "http://172.16.100.54/MAAS/"
-`knife[:maas_api_key]` - The MaaS API key from your settings page, ex: "Dce3YFAKEY3f9Lvm:jfPMAASfgDVbjR9:jS6JPX8bKEYFp8W2DR7MBuPb9QrEFbYT"
+`knife[:maas_site]` - The MaaS that you'd like to interact with, ex: "http://172.16.100.54/MAAS/", you'll need the ending `/` like the web gui.
+`knife[:maas_api_key]` - The MaaS API key from your settings page, ex: "Th1sIsFAKEY3f9Lvm:jaaMAASfgDVbjR9:jS6JPX8bKEYFp8W2DR7MBuPb9QrEFbYT"
 
 ## Commands
 
 `knife maas server list` - Outputs the nodes inside on MaaS
+
+`knife maas server <subcommand> --help` - is available and there are other options that aren't listed here. These are the most commonly used ones.
 
 `knife maas server acquire -h HOSTNAME` - Acquires the node under your account
 
@@ -28,11 +38,10 @@ gem 'knife-maas'
 
 `knife maas server stop -s NODE-(UUID)` - Stops the node
 
-`knife maas server release -s NODE-(UUID)`- Releases the node
+`knife maas server release -s NODE-(UUID)`- Releases the node and puts it back in the available resources. This also has a `-P` command to purge it from
+your chef server.
 
-`knife maas server delete -s NODE-(UUID)` - Removes the node from MaaS
-
-
+`knife maas server delete -s NODE-(UUID)` - Removes the node completely from MaaS. This also has a `-P` command to purge it from your chef server.
 
 ## Contributing
 
@@ -41,3 +50,20 @@ gem 'knife-maas'
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
+
+## License
+Author:: JJ Asghar <jj@chef.io>
+
+Copyright:: Copyright (c) 2015 Chef Software, Inc.
+
+License:: Apache License, Version 2.0
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the
+License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+either express or implied. See the License for the specific language governing permissions
+and limitations under the License.
