@@ -1,11 +1,11 @@
 # knife-maas
 
-This is the knife plugin to talk to [MaaS](http://maas.ubuntu.com/). This also assumes you have MaaS
+This is the knife plugin to talk to [MAAS](http://maas.ubuntu.com/). This also assumes you have MAAS
 configured with at least one user account. You'll need your API key as one of the
-configuration options. There is a [MaaS cookbook](https://supermarket.chef.io/cookbooks/maas) that
+configuration options. There is a [MAAS cookbook](https://supermarket.chef.io/cookbooks/maas) that
 this plugin has been tested against.
 
-This also assumes you have >= 1.7.1 of MaaS installed, and >= [Chef](http://chef.io) 12 installed.
+This also assumes you have >= 1.7.1 of MAAS installed, and >= [Chef](http://chef.io) 12 installed.
 
 Please refer to the [CHANGELOG](CHANGELOG.md) for version history.
 
@@ -21,16 +21,16 @@ gem install knife-maas
 
 ### Configuration
 
-`knife[:maas_site]` - The MaaS that you'd like to interact with, ex: `"http://172.16.100.54/MAAS/"`, you'll need the ending `/` like the web gui.
+`knife[:maas_site]` - The MAAS that you'd like to interact with, ex: `"http://172.16.100.54/MAAS/"`, you'll need the ending `/` like the web gui.
 
-`knife[:maas_api_key]` - The MaaS API key from your settings page, ex: `"Th1sIsFAKEY3f9Lvm:jaaMAASfgDVbjR9:jS6JPX8bKEYFp8W2DR7MBuPb9QrEFbYT"`
+`knife[:maas_api_key]` - The MAAS API key from your settings page, ex: `"Th1sIsFAKEY3f9Lvm:jaaMAASfgDVbjR9:jS6JPX8bKEYFp8W2DR7MBuPb9QrEFbYT"`
 
 ## Commands
 
-**Note**: Due to some limitations in the [MaaS API](http://maas.ubuntu.com/docs1.7/api.html) anything that has both `-h` and 
+**Note**: Due to some limitations in the [MAAS API](http://maas.ubuntu.com/docs1.7/api.html) anything that has both `-h` and 
 `-s` are required to function. Hopefully future releases will only require one option.
 
-`knife maas server list` - Outputs the nodes inside on MaaS
+`knife maas server list` - Outputs the nodes inside on MAAS
 
 `knife maas server <subcommand> --help` - is available and there are other options that aren't listed here. These are the most commonly used ones.
 
@@ -45,7 +45,7 @@ gem install knife-maas
 `knife maas server release -s NODE-(UUID) -h HOSTNAME`- Releases the node and puts it back in the available resources. This also has a `-P` command to purge it from
 your chef server.
 
-`knife maas server delete -s NODE-(UUID) -h HOSTNAME` - Removes the node completely from MaaS. This also has a `-P` command to purge it from your chef server.
+`knife maas server delete -s NODE-(UUID) -h HOSTNAME` - Removes the node completely from MAAS. This also has a `-P` command to purge it from your chef server.
 
 ## Contributing
 
