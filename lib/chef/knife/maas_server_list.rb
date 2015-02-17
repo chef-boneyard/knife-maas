@@ -31,7 +31,9 @@ class Chef
                              ui.color("failed", :red)
                            when "0","1","5","7","9","10","12","14"
                              ui.color("deploying", :yellow)
-                           when "4","6"
+                           when "4"
+                             ui.color("ready", :green)
+                           when "6"
                              ui.color("deployed", :green)
                            else
                              ui.color(state, :green)

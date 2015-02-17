@@ -50,7 +50,7 @@ class Chef
         end
 
         response = access_token.request(:post, "/nodes/#{system_id}/?op=release")
-        puts "Saying goodbye to #{system_id} now...."
+        puts "Releasing #{system_id} back to MAAS now...."
       end
 
 
