@@ -1,5 +1,7 @@
 # knife-maas
 
+[![Build Status](https://travis-ci.org/jjasghar/knife-maas.svg?branch=master)](https://travis-ci.org/jjasghar/knife-maas)
+
 This is the knife plugin to talk to [MAAS](http://maas.ubuntu.com/). This also assumes you have MAAS
 configured with at least one user account. You'll need your API key as one of the
 configuration options. There is a [MAAS cookbook](https://supermarket.chef.io/cookbooks/maas) that
@@ -27,7 +29,7 @@ gem install knife-maas
 
 ## Commands
 
-**Note**: Due to some limitations in the [MAAS API](http://maas.ubuntu.com/docs1.7/api.html) anything that has both `-h` and 
+**Note**: Due to some limitations in the [MAAS API](http://maas.ubuntu.com/docs1.7/api.html) anything that has both `-h` and
 `-s` are required to function. Hopefully future releases will only require one option.
 
 `knife maas server list` - Outputs the nodes inside on MAAS
