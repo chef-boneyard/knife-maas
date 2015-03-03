@@ -27,7 +27,7 @@ gem install knife-maas
 
 ## Commands
 
-**Note**: Due to some limitations in the [MAAS API](http://maas.ubuntu.com/docs1.7/api.html) anything that has both `-h` and 
+**Note**: Due to some limitations in the [MAAS API](http://maas.ubuntu.com/docs1.7/api.html) anything that has both `-h` and
 `-s` are required to function. Hopefully future releases will only require one option.
 
 `knife maas server list` - Outputs the nodes inside on MAAS
@@ -65,7 +65,9 @@ License:: Apache License, Version 2.0
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the License at
 
+```
 http://www.apache.org/licenses/LICENSE-2.0
+```
 
 Unless required by applicable law or agreed to in writing, software distributed under the
 License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
