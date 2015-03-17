@@ -31,8 +31,8 @@ class Chef
         system_id = locate_config_value(:system_id)
 
         response = access_token.request(:post, "/nodes/?op=acquire")
-        hostname = JSON.parse(system_info.body)["hostname"]
-        system_id = JSON.parse(system_info.body)["system_id"]
+        hostname = JSON.parse(response.body)["hostname"]
+        system_id = JSON.parse(response.body)["system_id"]
         system_info = access_token.request(:get, "/nodes/#{system_id}/")
         puts "Acquiring #{hostname} under your account now...."
 
