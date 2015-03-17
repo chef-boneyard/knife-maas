@@ -13,16 +13,6 @@ class Chef
 
       banner "knife maas server bootstrap (options)"
 
-      option :hostname,
-      :short => "-h HOSTNAME",
-      :long => "--hostname HOSTNAME",
-      :description => "The HOSTNAME inside of MaaS"
-
-      option :system_id,
-      :short => "-s SYSTEM_ID",
-      :long => "--system-id SYSTEM_ID",
-      :description => "The System ID inside of MaaS"
-
       option :template_file,
       :long => "--template-file TEMPLATE",
       :description => "Full path to location of template to use",
@@ -40,7 +30,10 @@ class Chef
         hostname = locate_config_value(:hostname)
         system_id = locate_config_value(:system_id)
 
-        response = access_token.request(:post, "/nodes/?op=acquire&name=#{hostname}")
+        response = access_token.request(:post, "/nodes/?op=acquire")
+        hostname = JSON.parse(system_info.body)["hostname"]
+        system_id = JSON.parse(system_info.body)["system_id"]
+        system_info = access_token.request(:get, "/nodes/#{system_id}/")
         puts "Acquiring #{hostname} under your account now...."
 
         # hack to ensure the node have had time to spin up
@@ -49,7 +42,6 @@ class Chef
         print(".")
 
         response = access_token.request(:post, "/nodes/#{system_id}/?op=start")
-        system_info = access_token.request(:get, "/nodes/#{system_id}/")
         puts "Starting up #{system_id} now...."
 
         # hack to ensure the nodes have had time to spin up

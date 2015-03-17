@@ -11,14 +11,9 @@ class Chef
 
       banner "knife maas server acquire (options)"
 
-      option :hostname,
-      :short => "-h HOSTNAME",
-      :long => "--hostname HOSTNAME",
-      :description => "The HOSTNAME inside of MaaS"
-
       def run
-        hostname = locate_config_value(:hostname)
-        response = access_token.request(:post, "/nodes/?op=acquire&name=#{hostname}")
+        response = access_token.request(:post, "/nodes/?op=acquire")
+        hostname = JSON.parse(system_info.body)["hostname"]
         puts "Acquiring #{hostname} under your account now...."
       end
 
