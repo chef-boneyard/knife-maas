@@ -13,7 +13,7 @@ class Chef
 
       def run
         response = access_token.request(:post, "/nodes/?op=acquire")
-        hostname = JSON.parse(system_info.body)["hostname"]
+        hostname = JSON.parse(response.body)["hostname"]
         puts "Acquiring #{hostname} under your account now...."
       end
 
