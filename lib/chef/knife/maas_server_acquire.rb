@@ -17,7 +17,6 @@ class Chef
         puts "Acquiring #{hostname} under your account now...."
       end
 
-
     end
   end
 end

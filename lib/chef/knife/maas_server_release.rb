@@ -13,19 +13,19 @@ class Chef
       option :hostname,
       :short => "-h HOSTNAME",
       :long => "--hostname HOSTNAME",
-      :description => "The HOSTNAME inside of MaaS"
+      :description => "The HOSTNAME inside of MAAS"
 
       option :system_id,
       :short => "-s SYSTEM_ID",
       :long => "--system-id SYSTEM_ID",
-      :description => "The System ID inside of MaaS"
+      :description => "The System ID inside of MAAS"
 
       option :purge,
       :short => "-P",
       :long => "--purge",
       :boolean => true,
       :default => false,
-      :description => "Destroy corresponding node and client on the Chef Server, in addition to releasing the MaaS node itself. Assumes node and client have the same name as the server."
+      :description => "Destroy corresponding node and client on the Chef Server, in addition to releasing the MAAS node itself. Assumes node and client have the same name as the server."
 
       def destroy_item(klass, name, type_name)
         begin
@@ -38,6 +38,9 @@ class Chef
       end
 
       def run
+
+        validate!
+
         system_id = locate_config_value(:system_id)
         hostname = locate_config_value(:hostname)
 

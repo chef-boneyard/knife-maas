@@ -50,8 +50,19 @@ class Chef
         Chef::Config[:knife][key] || config[key]
       end
 
+      def validate!(keys=[:hostname, :system_id])
+        errors = []
 
+        keys.each do |k|
+          if Chef::Config[:knife][k].nil?
+            errors << "You did not provide a valid '#{k}' value."
+          end
+        end
 
+        if errors.each{|e| ui.error(e)}.any?
+          exit 1
+        end
+      end
     end
   end
 end

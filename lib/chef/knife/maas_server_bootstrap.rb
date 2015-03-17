@@ -27,8 +27,6 @@ class Chef
       :default => []
 
       def run
-        hostname = locate_config_value(:hostname)
-        system_id = locate_config_value(:system_id)
 
         response = access_token.request(:post, "/nodes/?op=acquire")
         hostname = JSON.parse(response.body)["hostname"]
