@@ -36,11 +36,11 @@ class Chef
 
         # hack to ensure the node have had time to spin up
         print(".")
-        sleep 60
+        sleep 30
         print(".")
 
         response = access_token.request(:post, "/nodes/#{system_id}/?op=start")
-        puts "Starting up #{system_id} now...."
+        puts "\nStarting up #{hostname} now...."
 
         # hack to ensure the nodes have had time to spin up
         print(".")

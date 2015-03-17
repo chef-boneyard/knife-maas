@@ -36,16 +36,15 @@ gem install knife-maas
 
 `knife maas server <subcommand> --help` - is available and there are other options that aren't listed here. These are the most commonly used ones.
 
-`knife maas server acquire -h HOSTNAME` - Acquires the node under your account
+`knife maas server acquire` - Acquires a node under your account
 
-`knife maas server bootstrap -h HOSTNAME -s NODE-(UUID)` - Acquires and starts the node under your account, and bootstraps chef on it with your default settings
+`knife maas server bootstrap` - Acquires and starts a node under your account, and bootstraps chef on it with your default settings
 
 `knife maas server start -s NODE-(UUID)` - Starts up the node
 
 `knife maas server stop -s NODE-(UUID)` - Stops the node
 
-`knife maas server release -s NODE-(UUID) -h HOSTNAME`- Releases the node and puts it back in the available resources. This also has a `-P` command to purge it from
-your chef server.
+`knife maas server release -s NODE-(UUID) -h HOSTNAME`- Releases the node and puts it back in the available resources. This also has a `-P` command to purge it from your chef server.
 
 `knife maas server delete -s NODE-(UUID) -h HOSTNAME` - Removes the node completely from MAAS. This also has a `-P` command to purge it from your chef server.
 

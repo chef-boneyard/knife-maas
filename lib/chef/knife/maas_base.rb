@@ -54,7 +54,7 @@ class Chef
         errors = []
 
         keys.each do |k|
-          if Chef::Config[:knife][k].nil?
+          if locate_config_value(k).nil?
             errors << "You did not provide a valid '#{k}' value."
           end
         end
