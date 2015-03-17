@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Chef::Knife::Maas::VERSION
   spec.authors       = ["JJ Asghar"]
   spec.email         = ["jj@chef.io"]
-  spec.summary       = %q{A knife plugin to interact with MaaS}
-  spec.description   = %q{A knife plugin to interact with MaaS}
+  spec.summary       = %q{A knife plugin to interact with MAAS}
+  spec.description   = %q{A knife plugin to interact with MAAS}
   spec.homepage      = "http://github.com/jjasghar/knife-maas"
   spec.license       = "Apache2"
 
@@ -18,8 +18,8 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "chef", "~> 12.0.0"
-  spec.add_dependency "oauth"
+  spec.add_dependency "chef", "~> 12.0"
+  spec.add_dependency "oauth", "~> 0.4"
 
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"
