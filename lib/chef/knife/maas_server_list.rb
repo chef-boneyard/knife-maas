@@ -3,13 +3,11 @@ require 'chef/knife/maas_base'
 class Chef
   class Knife
     class MaasServerList < Knife
-
       include Chef::Knife::MaasBase
 
-      banner "knife maas server list"
+      banner 'knife maas server list'
 
       def run
-
         server_list = [
           ui.color('System ID', :bold),
           ui.color('Status', :bold),
@@ -19,22 +17,22 @@ class Chef
           ui.color('IP Address', :bold)
         ]
 
-        response = access_token.request(:get, "/nodes/?op=list")
-        JSON.parse(response.body).sort_by { |h| h["system_id"] }.each do |server|
+        response = access_token.request(:get, '/nodes/?op=list')
+        JSON.parse(response.body).sort_by { |h| h['system_id'] }.each do |server|
           Chef::Log.debug("Server: #{server.to_yaml}")
 
           server_list << server['system_id'].to_s
           server_list << begin
                            status = server['substatus'].to_s
                            case status
-                           when "2","3","8","11","13","15"
-                             ui.color("failed", :red)
-                           when "0","1","5","7","9","10","12","14"
-                             ui.color("deploying", :yellow)
-                           when "4"
-                             ui.color("ready", :green)
-                           when "6"
-                             ui.color("deployed", :green)
+                           when '2', '3', '8', '11', '13', '15'
+                             ui.color('failed', :red)
+                           when '0', '1', '5', '7', '9', '10', '12', '14'
+                             ui.color('deploying', :yellow)
+                           when '4'
+                             ui.color('ready', :green)
+                           when '6'
+                             ui.color('deployed', :green)
                            else
                              ui.color(status, :green)
                            end
@@ -56,26 +54,22 @@ class Chef
           # DISK_ERASING = 14
           # FAILED_DISK_ERASING = 15
           server_list <<  begin
-                           power_state = server['power_state'].to_s
-                           case power_state
-                           when "off"
-                             ui.color(power_state, :red)
-                           when "on"
-                             ui.color(power_state, :green)
-                           else
-                             ui.color(power_state, :yellow)
-                           end
+                            power_state = server['power_state'].to_s
+                            case power_state
+                            when 'off'
+                              ui.color(power_state, :red)
+                            when 'on'
+                              ui.color(power_state, :green)
+                            else
+                              ui.color(power_state, :yellow)
+                            end
                           end
           server_list << server['hostname'].to_s
           server_list << server['owner'].to_s
           server_list << server['ip_addresses'].to_s
-
         end
         puts ui.list(server_list, :uneven_columns_across, 6)
-
       end
-
-
     end
   end
 end
