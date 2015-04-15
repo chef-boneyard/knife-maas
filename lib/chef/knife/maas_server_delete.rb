@@ -1,6 +1,4 @@
 require 'chef/knife/maas_base'
-require 'chef/node'
-require 'chef/api_client'
 
 class Chef
   class Knife
@@ -24,30 +22,27 @@ class Chef
              long: '--purge',
              boolean: true,
              default: false,
-             description: 'Destroy corresponding node and client on the Chef Server, in addition to destroying the MaaS node itself. Assumes node and client have the same name as the server.'
-
-      def destroy_item(klass, name, type_name)
-        object = klass.load(name)
-        object.destroy
-        ui.warn("Deleted #{type_name} #{name}")
-      rescue Net::HTTPServerException
-        ui.warn("Could not find a #{type_name} named #{name} to delete!")
-      end
+             description: <<-EOS.gsub(/^ {15}/, '').gsub(/\n/, ' ')
+               Destroy corresponding node and client on the Chef Server, in
+               addition to destroying the MaaS node itself. Assumes node and
+               client have the same name as the server.
+             EOS
 
       def run
-        system_id = locate_config_value(:system_id)
-        hostname = locate_config_value(:hostname)
+        system_id = ensure_system_id!
+        node_name = ensure_chef_node_name! if config[:purge]
 
-        if config[:purge]
-          thing_to_delete = config[:chef_node_name] || hostname
-          destroy_item(Chef::Node, thing_to_delete, 'node')
-          destroy_item(Chef::ApiClient, thing_to_delete, 'client')
-        else
-          ui.warn("Corresponding node and client for the #{hostname} server were not deleted and remain registered with the Chef Server")
+        if print_node_status(client.delete_node(system_id))
+          if config[:purge]
+            destroy_item(Chef::Node, node_name, 'node')
+            destroy_item(Chef::ApiClient, node_name, 'client')
+          else
+            ui.warn <<-EOS.gsub(/^ {14}/, '').gsub(/\n/, ' ')
+              The corresponding node and client for #{node_name || system_id}
+              were not deleted and remain registered with the Chef Server
+            EOS
+          end
         end
-
-        response = access_token.request(:post, "/nodes/#{system_id}/?op=delete")
-        puts "Nuking #{system_id} From Orbit now...."
       end
     end
   end

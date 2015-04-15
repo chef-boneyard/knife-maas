@@ -5,11 +5,6 @@ class Chef
     class MaasServerStart < Knife
       include Chef::Knife::MaasBase
 
-      deps do
-        require 'chef/knife/bootstrap'
-        Chef::Knife::Bootstrap.load_deps
-      end
-
       banner 'knife maas server start (options)'
 
       option :system_id,
@@ -18,9 +13,10 @@ class Chef
              description: 'The System ID inside of MaaS'
 
       def run
-        system_id = locate_config_value(:system_id)
-        response = access_token.request(:post, "/nodes/#{system_id}/?op=start")
-        puts "Starting up #{system_id} now...."
+        unless system_id = locate_config_value(:system_id) || name_args[0]
+          ui.error('You must provide the system id of the node')
+        end
+        print_node_status(client.start_node(system_id))
       end
     end
   end

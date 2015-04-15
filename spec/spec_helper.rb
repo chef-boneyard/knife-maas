@@ -1,2 +1,3 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'chef/knife/maas'
+require 'chef/maas/version'
+require 'chef/maas/client'

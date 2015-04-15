@@ -27,7 +27,7 @@ class Chef
              short: '-r RUN_LIST',
              long: '--run-list RUN_LIST',
              description: 'Comma separated list of roles/recipes to apply',
-             proc: lambda { |o| o.split(/[\s,]+/) },
+             proc: -> (o) { o.split(/[\s,]+/) },
              default: []
 
       option :zone,
@@ -35,66 +35,38 @@ class Chef
              long: '--zone ZONE',
              description: 'Bootstrap inside a ZONE inside of MAAS'
 
+      option :bootstrap_timeout,
+             short: '-T TIMEOUT',
+             long: '--bootstrap-timeout',
+             description: 'How long to wait for the Server to initially boot',
+             default: 120
+
       def run
-        hostname = locate_config_value(:hostname)
-        zone = locate_config_value(:zone)
+        node = acquire_node(hostname: locate_config_value(:hostname),
+                            zone: locate_config_value(:zone)
+                           )
 
-        if !hostname.nil? && !zone.nil?
-          puts "\nPlease only use one of these options, zone or hostname"
-          exit 1
-        elsif !hostname.nil?
-          response = access_token.request(:post, '/nodes/', 'op' => 'acquire', 'name' => "#{hostname}")
-        elsif !zone.nil?
-          response = access_token.request(:post, '/nodes/', 'op' => 'acquire', 'zone' => "#{zone}")
-        else
-          response = access_token.request(:post, '/nodes/?op=acquire')
+
+        system_id = node['system_id']
+
+        with_timeout(60) do
+          # wait until node is in 'deployed' state
+          wait_with_dots until client.list_node(system_id)['status'].to_s == '6'
         end
 
-        hostname = JSON.parse(response.body)['hostname']
-        system_id = JSON.parse(response.body)['system_id']
-        system_info = access_token.request(:get, "/nodes/#{system_id}/")
-        puts "Acquiring #{hostname} under your account now...."
-
-        # hack to ensure the node have had time to spin up
-        print('.')
-        sleep 30
-        print('.')
-
-        response = access_token.request(:post, "/nodes/#{system_id}/?op=start")
-        puts "\nStarting up #{hostname} now...."
-
-        # hack to ensure the nodes have had time to spin up
-        print('.')
-        sleep 30
-        print('.')
-
-        server = JSON.parse(system_info.body)['hostname']
-        netboot = JSON.parse(system_info.body)['netboot']
-        power_state = JSON.parse(system_info.body)['power_state']
-
-        until (netboot == false) && (power_state == 'on')
-          print('.')
-          sleep @initial_sleep_delay ||= 10
-          system_info = access_token.request(:get, "/nodes/#{system_id}/")
-          netboot = JSON.parse(system_info.body)['netboot']
-          power_state = JSON.parse(system_info.body)['power_state']
+        with_timeout(60) do
+          # wait until node is in 'deployed' state
+          wait_with_dots until client.list_node(system_id)['status'].to_s == '6'
         end
 
-        bootstrap_ip_address = JSON.parse(system_info.body)['ip_addresses'][0]
+        system_info = client.list_node(system_id)
+        bootstrap_ip_address = system_info['ip_addresses'][0]
 
-        print('.')
-        sleep 30
-        print('.')
-        sleep 30
-
-        print('.') until tcp_test_ssh(bootstrap_ip_address) do
-          sleep @initial_sleep_delay ||= 10
-          puts('connected and done')
+        with_timeout(config[:bootstrap_timeout]) do
+          wait_with_dots(5) until tcp_test_ssh(bootstrap_ip_address)
         end
 
-        os_system = JSON.parse(system_info.body)['osystem']
-
-        case os_system
+        case system_info['osystem']
         when 'centos'
           user = 'cloud-user'
         else
@@ -137,10 +109,8 @@ class Chef
       rescue Errno::EPERM
         false
       rescue Errno::ECONNREFUSED
-        sleep 2
         false
       rescue Errno::EHOSTUNREACH
-        sleep 2
         false
       ensure
         tcp_socket && tcp_socket.close
