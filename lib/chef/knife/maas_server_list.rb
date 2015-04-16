@@ -36,7 +36,7 @@ class Chef
                            when "6"
                              ui.color("deployed", :green)
                            else
-                             ui.color(state, :green)
+                             ui.color(status, :green)
                            end
                          end
           # NEW = 0
