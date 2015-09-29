@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Chef::Knife::Maas do
+describe Chef::Maas do
   it 'has a version number' do
-    expect(Chef::Knife::Maas::VERSION).not_to be nil
+    expect(Chef::Maas::VERSION).not_to be nil
   end
 
   it 'does nothing useful' do

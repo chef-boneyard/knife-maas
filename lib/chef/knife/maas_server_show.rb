@@ -2,10 +2,10 @@ require 'chef/knife/maas_base'
 
 class Chef
   class Knife
-    class MaasServerStop < Knife
+    class MaasServerShow < Knife
       include Chef::Knife::MaasBase
 
-      banner 'knife maas server stop (options)'
+      banner 'knife maas server show $NODE (options)'
 
       option :system_id,
              short: '-s SYSTEM_ID',
@@ -16,7 +16,7 @@ class Chef
         unless system_id = locate_config_value(:system_id) || name_args[0]
           ui.error('You must provide the system id of the node')
         end
-        print_node_status(client.stop_node(system_id))
+        ui.info(Chef::JSONCompat.to_json_pretty(client.show_node(system_id)))
       end
     end
   end
