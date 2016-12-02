@@ -16,7 +16,7 @@ class Chef
         unless system_id = locate_config_value(:system_id) || name_args[0]
           ui.error('You must provide the system id of the node')
         end
-        print_node_status(client.start_node(system_id))
+        print_node_status(client.commission_node(system_id))
       end
     end
   end
