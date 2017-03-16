@@ -21,7 +21,7 @@ class Chef
         
         if list.is_a? Array
           list.sort_by { |h| h['system_id'] }.each do |server|
-            Chef::Log.debug("Server: #{server.to_yaml}")
+            #Chef::Log.debug("Server: #{server.to_yaml}")
 
             server_list << server['system_id'].to_s
 
