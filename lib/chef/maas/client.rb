@@ -31,9 +31,9 @@ module Maas
       end
 
       if hostname
-        response = post('/nodes/', 'op' => 'acquire', 'name' => "#{hostname}")
+        response = post('/machines/', 'op' => 'allocate', 'name' => "#{hostname}")
       elsif zone
-        response = post('/nodes/', 'op' => 'acquire', 'zone' => "#{zone}")
+        response = post('/machines/', 'op' => 'allocate', 'zone' => "#{zone}")
       end
 
       parse_response(response)
@@ -42,7 +42,7 @@ module Maas
     # TODO: Maybe use method_missing to dynamically build these helpers
 
     def delete_node(system_id)
-      parse_response(post("/nodes/#{system_id}/?op=delete"))
+      parse_response(delete("/nodes/#{system_id}/"))
     end
 
     def show_node(system_id)
@@ -50,27 +50,37 @@ module Maas
     end
 
     def list_node(system_id)
-      parse_response(get("/nodes/?op=list&id=#{system_id}")).first
+      list = parse_response(get("/nodes/?id=#{system_id}"))
+      if list.is_a? Array
+        return list.first
+      else
+        return Hash.new
+      end
     end
 
     def list_nodes
-      parse_response(get('/nodes/?op=list'))
+      parse_response(get('/nodes/'))
     end
 
     def release_node(system_id)
-      parse_response(post("/nodes/#{system_id}/?op=release"))
+      parse_response(post("/machines/#{system_id}/?op=release"))
     end
 
     def start_node(system_id)
-      parse_response(post("/nodes/#{system_id}/?op=start"))
+      parse_response(post("/machines/#{system_id}/?op=power_on"))
     end
 
+    def deploy_node(system_id)
+      parse_response(post("/machines/#{system_id}/?op=deploy"))
+    end
+
+
     def commission_node(system_id)
-      parse_response(post("/nodes/#{system_id}/?op=commission"))
+      parse_response(post("/machines/#{system_id}/?op=commission"))
     end
 
     def stop_node(system_id)
-      parse_response(post("/nodes/#{system_id}/?op=stop"))
+      parse_response(post("/machines/#{system_id}/?op=power_off"))
     end
 
     private
@@ -79,7 +89,7 @@ module Maas
       consumer_key, token_key, token_secret = api_key.split(':')
       consumer = OAuth::Consumer.new(consumer_key,
                                      '',
-                                     site: "#{site_uri}api/1.0",
+                                     site: "#{site_uri}api/2.0",
                                      scheme: :header,
                                      signature_method: 'PLAINTEXT'
                                     )
@@ -92,17 +102,17 @@ module Maas
     def parse_response(response)
       case response
       when Net::HTTPSuccess, Net::HTTPRedirection
-        parse_response_body(response.body)
+        parse_response_json(response)
       else
-        ui.error(parse_response_body(response.body))
+        ui.error(parse_response_json(response))
         exit 1
       end
     end
 
-    def parse_response_body(response)
-      Chef::JSONCompat.parse(response)
+    def parse_response_json(response)
+      Chef::JSONCompat.parse(response.body)
     rescue Chef::Exceptions::JSON::ParseError
-      response
+      response.body
     end
 
     def bson_parse(response)

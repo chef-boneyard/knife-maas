@@ -7,7 +7,7 @@ configured with at least one user account. You'll need your API key as one of th
 configuration options. There is a [MAAS cookbook](https://supermarket.chef.io/cookbooks/maas) that
 this plugin has been tested against.
 
-This also assumes you have >= 1.7.1 of MAAS installed, and >= [Chef](http://chef.io) 12 installed.
+This also assumes you have >= 2.0.0 of MAAS installed, and >= [Chef](http://chef.io) 12 installed.
 
 Please refer to the [CHANGELOG](CHANGELOG.md) for version history.
 

@@ -46,16 +46,20 @@ class Chef
                             zone: locate_config_value(:zone)
                            )
 
-
         system_id = node['system_id']
 
-        with_timeout(60) do
-          # wait until node is in 'deployed' state
-          wait_with_dots until client.list_node(system_id)['status'].to_s == '6'
-        end
+        puts "Acquiring #{node["hostname"]} under your account now.\n"
 
         with_timeout(60) do
-          # wait until node is in 'deployed' state
+          # wait until node is in 'Allocated' state
+          wait_with_dots until client.list_node(system_id)['status'].to_s == '10'
+        end
+
+        puts "Deploying #{node["hostname"]}\n"
+        client.deploy_node(system_id)
+
+        with_timeout(60000) do
+          # wait until node is in 'Allocated' state
           wait_with_dots until client.list_node(system_id)['status'].to_s == '6'
         end
 
@@ -111,6 +115,9 @@ class Chef
       rescue Errno::ECONNREFUSED
         false
       rescue Errno::EHOSTUNREACH
+        false
+      rescue Errno::ENETUNREACH
+        sleep 2
         false
       ensure
         tcp_socket && tcp_socket.close
