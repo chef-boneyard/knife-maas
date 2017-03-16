@@ -9,6 +9,8 @@ this plugin has been tested against.
 
 This also assumes you have >= 1.7.1 of MAAS installed, and >= [Chef](http://chef.io) 12 installed.
 
+The version `2.0.0`+ of this knife plugin, requires version 2.0 of MAAS API.
+
 Please refer to the [CHANGELOG](CHANGELOG.md) for version history.
 
 ## Installation
