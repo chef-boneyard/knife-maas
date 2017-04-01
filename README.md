@@ -1,6 +1,6 @@
 # knife-maas
 
-[![Build Status](https://travis-ci.org/jjasghar/knife-maas.svg?branch=master)](https://travis-ci.org/jjasghar/knife-maas)
+[![Build Status](https://travis-ci.org/chef-partners/knife-maas.svg?branch=master)](https://travis-ci.org/chef-partners/knife-maas)
 
 This is the knife plugin to talk to [MAAS](http://maas.ubuntu.com/). This also assumes you have MAAS
 configured with at least one user account. You'll need your API key as one of the
@@ -8,6 +8,8 @@ configuration options. There is a [MAAS cookbook](https://supermarket.chef.io/co
 this plugin has been tested against.
 
 This also assumes you have >= 2.0.0 of MAAS installed, and >= [Chef](http://chef.io) 12 installed.
+
+The version `2.0.0`+ of this knife plugin, requires version 2.0 of MAAS API.
 
 Please refer to the [CHANGELOG](CHANGELOG.md) for version history.
 
