@@ -1,7 +1,25 @@
 # Change Log
 
-## [v2.0.0](https://github.com/chef-partners/knife-maas/tree/v2.0.0)
+## [v2.1.0](https://github.com/chef-partners/knife-maas/tree/v2.1.0)
 
+[Full Changelog](https://github.com/chef-partners/knife-maas/compare/v2.0.0...v2.1.0)
+
+**Implemented enhancements:**
+
+- sleeps are race-condition prone [\#15](https://github.com/chef-partners/knife-maas/issues/15)
+
+**Closed issues:**
+
+- API 1.0 no longer supported in maas 2.0 [\#21](https://github.com/chef-partners/knife-maas/issues/21)
+- if statement is not needed. [\#17](https://github.com/chef-partners/knife-maas/issues/17)
+- Ability to select or change the OS from knife [\#7](https://github.com/chef-partners/knife-maas/issues/7)
+- Give the option of either hostname or systemid [\#5](https://github.com/chef-partners/knife-maas/issues/5)
+
+**Merged pull requests:**
+
+- Merge of 2.0 update [\#24](https://github.com/chef-partners/knife-maas/pull/24) ([tpmullan](https://github.com/tpmullan))
+
+## [v2.0.0](https://github.com/chef-partners/knife-maas/tree/v2.0.0) (2017-03-16)
 [Full Changelog](https://github.com/chef-partners/knife-maas/compare/v1.2.0...v2.0.0)
 
 **Merged pull requests:**

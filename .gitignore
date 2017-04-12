@@ -14,3 +14,7 @@
 mkmf.log
 *.gem
 .idea/
+.chef/
+.direnv/
+.envrc
+.ruby-version
