@@ -3,7 +3,6 @@ require 'chef/knife/maas_base'
 class Chef
   class Knife
     class MaasServerBootstrap < Knife
-
       include Chef::Knife::MaasBase
 
       deps do
@@ -11,100 +10,74 @@ class Chef
         Chef::Knife::Bootstrap.load_deps
       end
 
-      banner "knife maas server bootstrap (options)"
+      banner 'knife maas server bootstrap (options)'
 
       option :hostname,
-      :short => "-h HOSTNAME",
-      :long => "--hostname HOSTNAME",
-      :description => "The HOSTNAME inside of MAAS"
+             short: '-h HOSTNAME',
+             long: '--hostname HOSTNAME',
+             description: 'The HOSTNAME inside of MAAS'
 
       option :template_file,
-      :long => "--template-file TEMPLATE",
-      :description => "Full path to location of template to use",
-      :proc => Proc.new { |t| Chef::Config[:knife][:template_file] = t },
-      :default => false
+             long: '--template-file TEMPLATE',
+             description: 'Full path to location of template to use',
+             proc: proc { |t| Chef::Config[:knife][:template_file] = t },
+             default: false
 
       option :run_list,
-      :short => "-r RUN_LIST",
-      :long => "--run-list RUN_LIST",
-      :description => "Comma separated list of roles/recipes to apply",
-      :proc => lambda { |o| o.split(/[\s,]+/) },
-      :default => []
+             short: '-r RUN_LIST',
+             long: '--run-list RUN_LIST',
+             description: 'Comma separated list of roles/recipes to apply',
+             proc: -> (o) { o.split(/[\s,]+/) },
+             default: []
 
       option :zone,
-      :short => "-Z ZONE",
-      :long => "--zone ZONE",
-      :description => "Bootstrap inside a ZONE inside of MAAS"
+             short: '-Z ZONE',
+             long: '--zone ZONE',
+             description: 'Bootstrap inside a ZONE inside of MAAS'
+
+      option :bootstrap_timeout,
+             short: '-T TIMEOUT',
+             long: '--bootstrap-timeout',
+             description: 'How long to wait for the Server to initially boot',
+             default: 120
 
       def run
+        node = acquire_node(hostname: locate_config_value(:hostname),
+                            zone: locate_config_value(:zone)
+                           )
 
-        hostname = locate_config_value(:hostname)
-        zone = locate_config_value(:zone)
+        system_id = node['system_id']
 
-        if (!hostname.nil? && !zone.nil?)
-          puts "\nPlease only use one of these options, zone or hostname"
-          exit 1
-        elsif !hostname.nil?
-          response = access_token.request(:post, "/nodes/", {'op'=> 'acquire','name' => "#{hostname}"})
-        elsif !zone.nil?
-          response = access_token.request(:post, "/nodes/", {'op'=> 'acquire','zone' => "#{zone}"})
-        else
-          response = access_token.request(:post, "/nodes/?op=acquire")
+        puts "Acquiring #{node["hostname"]} under your account now.\n"
+
+        with_timeout(60) do
+          # wait until node is in 'Allocated' state
+          wait_with_dots until client.list_node(system_id)['status'].to_s == '10'
         end
 
-        hostname = JSON.parse(response.body)["hostname"]
-        system_id = JSON.parse(response.body)["system_id"]
-        system_info = access_token.request(:get, "/nodes/#{system_id}/")
-        puts "Acquiring #{hostname} under your account now...."
+        puts "Deploying #{node["hostname"]}\n"
+        client.deploy_node(system_id)
 
-        # hack to ensure the node have had time to spin up
-        print(".")
-        sleep 30
-        print(".")
-
-        response = access_token.request(:post, "/nodes/#{system_id}/?op=start")
-        puts "\nStarting up #{hostname} now...."
-
-        # hack to ensure the nodes have had time to spin up
-        print(".")
-        sleep 30
-        print(".")
-
-        server = JSON.parse(system_info.body)["hostname"]
-        netboot = JSON.parse(system_info.body)["netboot"]
-        power_state = JSON.parse(system_info.body)["power_state"]
-
-        until ((netboot == false) && (power_state == "on") ) do
-          print(".")
-          sleep @initial_sleep_delay ||= 10
-          system_info = access_token.request(:get, "/nodes/#{system_id}/")
-          netboot = JSON.parse(system_info.body)["netboot"]
-          power_state = JSON.parse(system_info.body)["power_state"]
+        with_timeout(60000) do
+          # wait until node is in 'Allocated' state
+          wait_with_dots until client.list_node(system_id)['status'].to_s == '6'
         end
 
-        bootstrap_ip_address = JSON.parse(system_info.body)["ip_addresses"][0]
+        system_info = client.list_node(system_id)
+        bootstrap_ip_address = system_info['ip_addresses'][0]
 
-        print(".")
-        sleep 30
-        print(".")
-        sleep 30
+        with_timeout(config[:bootstrap_timeout]) do
+          wait_with_dots(5) until tcp_test_ssh(bootstrap_ip_address)
+        end
 
-        print(".") until tcp_test_ssh(bootstrap_ip_address) {
-          sleep @initial_sleep_delay ||= 10
-          puts("connected and done")
-        }
-
-        os_system = JSON.parse(system_info.body)["osystem"]
-
-        case os_system
-        when "centos"
-          user = "cloud-user"
+        case system_info['osystem']
+        when 'centos'
+          user = 'cloud-user'
         else
-          user = "ubuntu"
+          user = 'ubuntu'
         end
 
         bootstrap_for_node(server, bootstrap_ip_address, user).run
-
       end
 
       def bootstrap_for_node(server, bootstrap_ip_address, user)
@@ -140,10 +113,8 @@ class Chef
       rescue Errno::EPERM
         false
       rescue Errno::ECONNREFUSED
-        sleep 2
         false
       rescue Errno::EHOSTUNREACH
-        sleep 2
         false
       rescue Errno::ENETUNREACH
         sleep 2
@@ -151,7 +122,6 @@ class Chef
       ensure
         tcp_socket && tcp_socket.close
       end
-
     end
   end
 end
